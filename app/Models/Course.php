@@ -21,3 +21,4 @@ class Course extends Model
     ];
 
 }
+

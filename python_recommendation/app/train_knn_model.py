@@ -184,3 +184,4 @@ print("Model loaded successfully!")
 
 # تحميل النموذج عند بدء تشغيل Flask
 model = joblib.load('knn_course_recommendation_model.pkl')
+

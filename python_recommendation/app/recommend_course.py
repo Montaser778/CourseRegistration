@@ -33,3 +33,4 @@ except ValueError:
     print("Error: All inputs must be integers (student_id, course_id, difficulty).")
 except Exception as e:
     print(f"An error occurred: {e}")
+

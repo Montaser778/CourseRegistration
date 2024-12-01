@@ -36,3 +36,4 @@
     <button type="submit">Enroll in this course</button>
 </form>
 @endsection
+

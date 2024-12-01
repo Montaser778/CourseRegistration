@@ -14,3 +14,4 @@ class AcademicStudentDetail extends Model
     // أعمدة معينة تحتاج لحمايتها من الكتابة
     protected $guarded = [];
 }
+

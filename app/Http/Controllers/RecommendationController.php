@@ -175,3 +175,4 @@ class RecommendationController extends Controller
         return redirect()->back()->with('error', 'Failed to fetch recommendations.');
     }
 }
+

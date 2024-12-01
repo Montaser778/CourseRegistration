@@ -11,3 +11,4 @@ class AcademicCalendar extends Model
     // تأكد من أن الجدول مهيأ بشكل صحيح
     protected $table = 'academic_calendars';
 }
+

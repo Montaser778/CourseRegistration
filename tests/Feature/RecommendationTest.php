@@ -24,6 +24,7 @@ class RecommendationTest extends TestCase
     $response->assertStatus(200);
     $response->assertSee($course2->name);
     $response->assertDontSee($course3->name);
-    
+
     }
 }
+

@@ -32,7 +32,7 @@ class CourseController extends Controller
 
     return redirect()->route('courses.show', $course->id)
     ->with('success', 'You have successfully enrolled in this course!');
-        
+
 
     public function getrecommendedCourses()
     {
@@ -102,3 +102,4 @@ class CourseController extends Controller
     return view('courses.show', compact('course'));
     }
 }
+

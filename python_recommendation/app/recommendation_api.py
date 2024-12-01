@@ -24,7 +24,7 @@ def recommend():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
+
     recommendations = get_recommendations(model, user_id, courses)
     return jsonify(recommendations)
 
@@ -82,3 +82,4 @@ def recommend():
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
+

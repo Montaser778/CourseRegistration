@@ -56,4 +56,6 @@ Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.sh
 Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
 =======
 require __DIR__.'/auth.php';
+
 >>>>>>> f872f03e87a2d94b02de37a4f7fd33626df41816
+

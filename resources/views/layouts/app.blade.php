@@ -7,3 +7,4 @@
         {{ session('success') }}
     </div>
 @endif
+

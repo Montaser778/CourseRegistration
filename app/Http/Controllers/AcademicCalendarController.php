@@ -20,3 +20,4 @@ class AcademicCalendarController extends Controller
     return response()->json($calendar);
     }
 }
+
