@@ -19,11 +19,20 @@ class CourseController extends Controller
 
     public function enroll($courseId)
     {
-        $user = auth()->user();
+        $user = auth()->user();// المستخدم المسجل
+        $course = Course::findOrFail($id);
         $user->recommendations()->create(['course_id' => $courseId]);
 
-        return redirect()->back()->with('success', 'Course enrolled successfully!');
-    }
+        if (!$user->courses()->where('course_id', $id)->exists()) {
+            $user->courses()->attach($course->id);
+            return redirect()->back()->with('success', 'You have successfully enrolled in this course!');
+
+         // إضافة الدورة إلى تسجيلات المستخدم
+    $user->courses()->attach($courseId->id);
+
+    return redirect()->route('courses.show', $course->id)
+    ->with('success', 'You have successfully enrolled in this course!');
+        
 
     public function getrecommendedCourses()
     {

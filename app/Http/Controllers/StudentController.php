@@ -7,8 +7,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
-    <?php
-
+    
 public function importStudents(Request $request)
 {
     Excel::import(new StudentsImport, $request->file('file'));

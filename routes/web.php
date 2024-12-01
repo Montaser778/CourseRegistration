@@ -62,3 +62,15 @@ Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.sh
 Route::get('/recommendations/{userId}', [RecommendationController::class, 'getRecommendations'])->name('recommendations');
 
 Route::get('/recommendations/{userId}', [RecommendationController::class, 'getRecommendationsFromPython'])->name('recommendations.python');
+
+
+Route::middleware(['auth'])->get('/recommendations', [RecommendationController::class, 'getRecommendationsForCurrentUser'])
+     ->name('recommendations');
+
+Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+
+Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
+
+Route::get('/recommendations', [RecommendationController::class, 'index'])->name('recommendations');
+Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');

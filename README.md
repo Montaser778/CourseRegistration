@@ -64,3 +64,21 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+# Course Recommendation System
+
+## Features
+- User Login and Registration (Laravel Breeze)
+- Course Recommendations (Flask API with KNN)
+- Course Enrollment and Management
+- User-friendly Interface (Bootstrap)
+
+## Installation
+1. Clone the repository.
+2. Run `composer install` and `npm install`.
+3. Run `php artisan migrate`.
+4. Start the servers:
+   - `php artisan serve`
+   - `python recommendation_api.py`

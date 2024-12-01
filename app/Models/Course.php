@@ -12,4 +12,12 @@ class Course extends Model
         ->where('id', '!=', $this->id) // لا تشمل نفس الدورة
         ->get();
     }
+
+    protected $fillable = [
+        'name',
+        'category',
+        'description',
+        'is_active', // الحقل الجديد
+    ];
+
 }

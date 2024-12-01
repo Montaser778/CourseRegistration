@@ -11,5 +11,12 @@ class AcademicCalendarController extends Controller
     {
         $calendar = AcademicCalendar::all();
         return response()->json($calendar);
+        // أو يمكن استخدام السطر التالي بدلاً منه إذا استمرت المشكلة
+        // return \Illuminate\Support\Facades\Response::json($calendar);
+    }
+    public function testModel()
+{
+    $calendar = AcademicCalendar::first(); // أو AcademicCalendar::all();
+    return response()->json($calendar);
     }
 }

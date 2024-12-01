@@ -2,15 +2,29 @@ from flask import Flask, request, jsonify
 import joblib
 from flask import Flask, jsonify, request
 from recommend_course import load_model, get_recommendations
+from flask_caching import Cache
 
 app = Flask(__name__)
 model = joblib.load('knn_course_recommendation_model.pkl')  # تحميل النموذج المحفوظ
 
+cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
+
+# إعداد الكاش
 @app.route('/recommend', methods=['POST'])
+@cache.cached(timeout=60, query_string=True)
 def recommend():
     data = request.json  # بيانات JSON المرسلة من Laravel
     user_id = data['user_id']
-    courses = data['courses']  # قائمة الدورات المتاحة
+    courses = data['courses'] # قائمة الدورات المتاحة
+    recommendations = [
+        {'course_id': course['course_id'], 'predicted_rating': 4.5}
+        for course in courses
+    ]
+    return jsonify(recommendations)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+    
     recommendations = get_recommendations(model, user_id, courses)
     return jsonify(recommendations)
 
@@ -38,6 +52,24 @@ def get_recommendations(user_id, courses):
     predictions = [model.predict(user_id, course['course_id']) for course in courses]
     sorted_predictions = sorted(predictions, key=lambda x: x.est, reverse=True)
     return [{'course_id': pred.iid, 'predicted_rating': pred.est} for pred in sorted_predictions[:5]]
+
+# نقطة النهاية لتقديم التوصيات
+@app.route('/recommend', methods=['POST'])
+@cache.cached(timeout=60, query_string=True)  # الكاش لمدة 60 ثانية
+def recommend():
+    try:
+        # استلام البيانات من الطلب
+        data = request.json
+        user_id = data['user_id']
+        courses = data['courses']
+
+# تنفيذ التوصيات
+        recommendations = get_recommendations(model, user_id, courses)
+        return jsonify(recommendations)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    @cache.cached(timeout=60, key_prefix=lambda: f"user_{request.json['user_id']}")
 
 # تعريف API للتوصيات
 @app.route('/recommend', methods=['POST'])

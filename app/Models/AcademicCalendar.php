@@ -4,13 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class AcademicCalendar extends Model
 {
     use HasFactory;
 
-    protected $table = 'academiccalendar'; // تحديد اسم الجدول
-
-    // أعمدة معينة تحتاج لحمايتها من الكتابة
-    protected $guarded = [];
+    // تأكد من أن الجدول مهيأ بشكل صحيح
+    protected $table = 'academic_calendars';
 }

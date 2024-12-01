@@ -34,11 +34,29 @@ class RecommendationController extends Controller
         $similarCourses = $course->similarCourses();
         $recommendedCourses = $recommendedCourses->merge($similarCourses);
 
+        $userId = auth()->id(); // معرف المستخدم المسجل
+
         // إرسال طلب إلى Flask API
     $response = Http::post('http://127.0.0.1:5000/recommend', [
         'user_id' => $userId,
-        'courses' => Course::all()->toArray(), // جميع الدورات المتاحة
+        'courses' => Course::where('is_active', 1)->get()->toArray(),
     ]);
+
+    // معالجة النتائج
+    if ($response->ok()) {
+        $recommendations = $response->json();
+        $courseIds = array_column($recommendations, 'course_id');
+        $courses = Course::whereIn('id', $courseIds)->get();
+
+        foreach ($courses as $course) {
+            $course->predicted_rating = collect($recommendations)
+                ->firstWhere('course_id', $course->id)['predicted_rating'];
+        }
+
+        return view('recommendations', compact('courses'));
+    }
+
+    return response()->json(['error' => 'Unable to fetch recommendations'], 500);
 
     // التحقق من نجاح الطلب
     if ($response->ok()) {
@@ -57,7 +75,6 @@ class RecommendationController extends Controller
     }
 
     return response()->json(['error' => 'Unable to fetch recommendations'], 500);
-    }
 
     // إزالة التكرارات
     $recommendedCourses = $recommendedCourses->unique('id');
@@ -70,7 +87,7 @@ class RecommendationController extends Controller
             ->get();
 
         return view('recommendations', compact('recommendedCourses'));
-    }
+
 
     public function getRecommendations($userId)
     {
@@ -101,7 +118,7 @@ class RecommendationController extends Controller
     }
 
     public function userRecommendations()
-{
+    {
 
     $user = auth()->user();
     $recommendations = $user->recommendations->load('course');
@@ -109,7 +126,7 @@ class RecommendationController extends Controller
     return view('user.recommendations', ['recommendations' => $recommendations]);
 
     }
-    
+
     public function getRecommendationsFromPython($userId)
     {
         // إرسال طلب إلى Flask API
@@ -138,5 +155,23 @@ class RecommendationController extends Controller
 
         // إذا فشل الطلب
         return response()->json(['error' => 'Unable to fetch recommendations'], 500);
+    }
+
+    public function index()
+    {
+        $userId = auth()->id();
+        $response = Http::post('http://127.0.0.1:5000/recommend', [
+            'user_id' => $userId,
+            'courses' => Course::all()->toArray(),
+        ]);
+        if ($response->ok()) {
+            $recommendations = $response->json();
+            $courseIds = array_column($recommendations, 'course_id');
+            $courses = Course::whereIn('id', $courseIds)->get();
+
+            return view('recommendations', compact('courses'));
+        }
+
+        return redirect()->back()->with('error', 'Failed to fetch recommendations.');
     }
 }
