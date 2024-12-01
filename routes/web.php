@@ -1,50 +1,30 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AcademicCalendarController;
-use App\Http\Controllers\AcademicStudentDetailController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\RegistrationController;
-use App\Http\Controllers\RecommendationController;
-use App\Http\Controllers\DataExportController;
+use Inertia\Inertia;
 
-Route::post('/recommend', [RecommendationController::class, 'recommend']);
-Route::get('/export', [DataExportController::class, 'exportToCsv']);Route::post('/register', [RegistrationController::class, 'register']);
-Route::get('/academiccalendar', [AcademicCalendarController::class, 'index']);
-Route::get('/academicstudentdetails', [AcademicStudentDetailController::class, 'index']);
-Route::get('/register', [CourseController::class, 'showRegisterForm'])->name('course.registerForm');
-Route::post('/register', [CourseController::class, 'register'])->name('course.register');
 Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/register-courses', function () {
-    return view('courses.registration');
-});
-
-Route::post('/import-courses', [CourseController::class, 'importCourses'])->name('courses.import');
-
-// مسار GET لعرض صفحة التحميل
-Route::get('/import-courses', function () {
-    return view('courses.import');  // عرض صفحة تحميل الملف
-})->name('courses.import.view');
-
-// مسار POST لمعالجة رفع الملف واستيراده
-Route::post('/import-courses', [CourseController::class, 'importCourses'])->name('courses.import');
-
-Route::get('/import-courses', function () {
-    return view('courses.import');
-})->name('courses.import.view');
-
-Route::post('/import-multiple-courses', [CourseController::class, 'importMultipleCourses'])->name('courses.import.multiple');
-
-Route::get('/recommendation', [RecommendationController::class, 'show'])->name('recommend.show');
-Route::post('/recommendation', [RecommendationController::class, 'getRecommendation'])->name('recommend.course');
-
-// الصفحة الرئيسية
-Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+<<<<<<< HEAD
 // عرض جميع الدورات
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 
@@ -74,3 +54,6 @@ Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])->name('
 Route::get('/recommendations', [RecommendationController::class, 'index'])->name('recommendations');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
 Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
+=======
+require __DIR__.'/auth.php';
+>>>>>>> f872f03e87a2d94b02de37a4f7fd33626df41816
