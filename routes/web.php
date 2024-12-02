@@ -24,7 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-<<<<<<< HEAD
 // عرض جميع الدورات
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 
@@ -54,8 +53,4 @@ Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])->name('
 Route::get('/recommendations', [RecommendationController::class, 'index'])->name('recommendations');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
 Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
-=======
 require __DIR__.'/auth.php';
-
->>>>>>> f872f03e87a2d94b02de37a4f7fd33626df41816
-
